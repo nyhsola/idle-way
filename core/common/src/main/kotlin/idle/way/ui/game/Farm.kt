@@ -11,32 +11,32 @@ import com.badlogic.gdx.utils.Align
 import idle.way.event.EventContext
 import idle.way.event.EventQueue
 import idle.way.service.CommonResources
-import idle.way.service.MineService
+import idle.way.service.FarmService
 import idle.way.service.PlayerService
 import org.koin.core.annotation.Single
 import org.koin.java.KoinJavaComponent
 
 @Single
-class Mine : Table() {
+class Farm : Table() {
     private val eventQueue: EventQueue by KoinJavaComponent.inject(EventQueue::class.java)
     private val commonResources: CommonResources by KoinJavaComponent.inject(CommonResources::class.java)
-    private val mineService: MineService by KoinJavaComponent.inject(MineService::class.java)
+    private val farmService: FarmService by KoinJavaComponent.inject(FarmService::class.java)
 
     private val headerTemplate
-        get() = "Mine Level ${mineService.getLevel()}"
+        get() = "Farm Level ${farmService.getLevel()}"
     private val workersCountLabelTemplate
-        get() = "Workers (Assigned): ${mineService.getWorkersCount()}"
-    private val stoneIncomeLabelTemplate
-        get() = "${String.format("%.2f", mineService.getIncomeStone())} Stone per ${String.format("%.2f", mineService.getTimeSpawn())} sec"
-    private val stoneLevelButtonTemplate
-        get() = "Upgrade: (${mineService.getLevel() + 1} lvl)"
+        get() = "Workers (Assigned): ${farmService.getWorkersCount()}"
+    private val wheatIncomeLabelTemplate
+        get() = "${String.format("%.2f", farmService.getIncomeWheat())} Stone per ${String.format("%.2f", farmService.getTimeSpawn())} sec"
+    private val farmLevelButtonTemplate
+        get() = "Upgrade: (${farmService.getLevel() + 1} lvl)"
     private val assignWorkerButtonTemplate
         get() = "Assign worker x1"
 
     private val headerLabel = Label(headerTemplate, commonResources.skin)
     private val workersCountLabel = Label(workersCountLabelTemplate, commonResources.skin)
-    private val stoneIncomeLabel = Label(stoneIncomeLabelTemplate, commonResources.skin)
-    private val stoneLevelButton = TextButton(stoneLevelButtonTemplate, commonResources.skin)
+    private val farmIncomeLabel = Label(wheatIncomeLabelTemplate, commonResources.skin)
+    private val farmLevelButton = TextButton(farmLevelButtonTemplate, commonResources.skin)
     private val assignWorkerButton = TextButton(assignWorkerButtonTemplate, commonResources.skin)
     private val incomeBar = ProgressBar(0f, 100f, 1f, false, commonResources.skin)
     private val signal = Signal<EventContext>()
@@ -46,45 +46,45 @@ class Mine : Table() {
 
         headerLabel.setAlignment(Align.center)
         workersCountLabel.setAlignment(Align.center)
-        stoneIncomeLabel.setAlignment(Align.center)
+        farmIncomeLabel.setAlignment(Align.center)
 
         add(headerLabel).grow()
         row()
         add(workersCountLabel).grow()
         row()
-        add(stoneIncomeLabel).grow()
+        add(farmIncomeLabel).grow()
         row()
         add(assignWorkerButton).grow()
         row()
-        add(stoneLevelButton).grow()
+        add(farmLevelButton).grow()
         row()
         add(incomeBar).grow()
 
-        stoneLevelButton.addCaptureListener(object : ClickListener() {
+        farmLevelButton.addCaptureListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
-                signal.dispatch(EventContext(PlayerService.UPGRADE_MINE))
+                signal.dispatch(EventContext(PlayerService.UPGRADE_FARM))
             }
         })
 
         assignWorkerButton.addCaptureListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
-                signal.dispatch(EventContext(PlayerService.ASSIGN_WORKER_MINE))
+                signal.dispatch(EventContext(PlayerService.ASSIGN_WORKER_FARM))
             }
         })
 
         headerLabel.color.a = 0.75f
         workersCountLabel.color.a = 0.75f
-        stoneIncomeLabel.color.a = 0.75f
+        farmIncomeLabel.color.a = 0.75f
         assignWorkerButton.color.a = 0.75f
-        stoneLevelButton.color.a = 0.75f
+        farmLevelButton.color.a = 0.75f
     }
 
     override fun act(delta: Float) {
         headerLabel.setText(headerTemplate)
         workersCountLabel.setText(workersCountLabelTemplate)
-        stoneIncomeLabel.setText(stoneIncomeLabelTemplate)
-        stoneLevelButton.setText(stoneLevelButtonTemplate)
-        incomeBar.value = 100 - 100 * (mineService.getTimeLeft() / mineService.getTimeSpawn())
+        farmIncomeLabel.setText(wheatIncomeLabelTemplate)
+        farmLevelButton.setText(farmLevelButtonTemplate)
+        incomeBar.value = 100 - 100 * (farmService.getTimeLeft() / farmService.getTimeSpawn())
         super.act(delta)
     }
 }

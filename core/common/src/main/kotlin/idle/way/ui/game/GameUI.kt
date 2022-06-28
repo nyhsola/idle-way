@@ -31,6 +31,8 @@ class GameUI : Entity() {
     private val rootTable = Table()
     private val castle: Castle by KoinJavaComponent.inject(Castle::class.java)
     private val mine: Mine by KoinJavaComponent.inject(Mine::class.java)
+    private val sawMill: SawMill by KoinJavaComponent.inject(SawMill::class.java)
+    private val farm: Farm by KoinJavaComponent.inject(Farm::class.java)
     private val panelResources: PanelResources by KoinJavaComponent.inject(PanelResources::class.java)
     private val signal = Signal<EventContext>()
 
@@ -56,7 +58,7 @@ class GameUI : Entity() {
         val stack = Stack()
         val container = Container(stack).fill()
         stack.add(panelResources())
-        stack.add(castleAndMine())
+        stack.add(buildings())
         stack.add(escButton())
         return container
     }
@@ -92,12 +94,16 @@ class GameUI : Entity() {
         return container
     }
 
-    private fun castleAndMine(): Container<out Group> {
+    private fun buildings(): Container<out Group> {
         val table = Table()
         val container = Container(table).fill()
         table.add(castle())
             .width(Value.percentWidth(0.25f, container))
         table.add(mine())
+            .width(Value.percentWidth(0.25f, container))
+        table.add(sawmill())
+            .width(Value.percentWidth(0.25f, container))
+        table.add(farm())
             .width(Value.percentWidth(0.25f, container))
         return container
     }
@@ -106,6 +112,26 @@ class GameUI : Entity() {
         val table = Table()
         val container = Container(table).fill()
         table.add(mine)
+            .width(Value.percentWidth(0.25f, container))
+            .align(Align.center)
+            .expand()
+        return container
+    }
+
+    private fun sawmill(): Container<Table> {
+        val table = Table()
+        val container = Container(table).fill()
+        table.add(sawMill)
+            .width(Value.percentWidth(0.25f, container))
+            .align(Align.center)
+            .expand()
+        return container
+    }
+
+    private fun farm(): Container<Table> {
+        val table = Table()
+        val container = Container(table).fill()
+        table.add(farm)
             .width(Value.percentWidth(0.25f, container))
             .align(Align.center)
             .expand()
