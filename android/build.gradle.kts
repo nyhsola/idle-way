@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    buildToolsVersion("29.0.3")
+    buildToolsVersion("30.0.2")
     compileSdkVersion(31)
     sourceSets {
         named("main") {
@@ -14,9 +14,9 @@ android {
         }
     }
     defaultConfig {
-        val appVersion: String = "1.0.0"
+        val appVersion = "1.0.0"
         applicationId = "com.example.android"
-        minSdkVersion(14)
+        minSdkVersion(31)
         targetSdkVersion(31)
         versionCode = appVersion.split('.').joinToString("") { it.padStart(2, '0') }.toInt()
         versionName = appVersion
@@ -28,8 +28,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_6
-        targetCompatibility = JavaVersion.VERSION_1_6
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
 

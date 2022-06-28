@@ -1,4 +1,4 @@
-Simple castle
+Idle way
 =====
 [![Discord Chat](https://img.shields.io/discord/976981768387309638?logo=discord&style=flat-square)](https://discord.gg/4B9Gg5eUU9)
 

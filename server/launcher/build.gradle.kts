@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.util.capitalizeDecapitalize.toLowerCaseAsciiOnly
 
 val assetsPath: String = rootProject.file("android/assets").path
 val os = (System.getProperties()["os.name"] as String).toLowerCaseAsciiOnly()
-val gameClassName: String = "castle.core.app.ServerLauncher"
+val gameClassName: String = "idle.way.app.ServerLauncher"
 
 plugins {
     application
@@ -43,8 +43,7 @@ dependencies {
     implementation(libs.kapp)
     implementation(libs.gbackend)
     implementation(libs.glwjgl3)
+    implementation(libs.koin)
 
     implementation(variantOf(libs.gplatformdesktop) { classifier("natives-desktop") })
-    implementation(variantOf(libs.gplatformbullet) { classifier("natives-desktop") })
-    implementation(variantOf(libs.gplatformfreetype) { classifier("natives-desktop") })
 }
