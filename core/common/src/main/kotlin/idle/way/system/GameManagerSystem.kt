@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.systems.IntervalSystem
 import com.badlogic.gdx.Gdx
 import idle.way.event.EventQueue
+import idle.way.service.PlayerService
 import idle.way.ui.service.UIService
 import ktx.app.KtxInputAdapter
 import ktx.app.KtxScreen
@@ -18,10 +19,16 @@ class GameManagerSystem : IntervalSystem(GAME_TICK), KtxInputAdapter, KtxScreen 
     }
 
     private val uiService: UIService by inject(UIService::class.java)
+    private val playerService: PlayerService by inject(PlayerService::class.java)
     private val eventQueue: EventQueue by inject(EventQueue::class.java)
 
     override fun addedToEngine(engine: Engine) {
         uiService.init()
+    }
+
+    override fun update(deltaTime: Float) {
+        playerService.update(deltaTime)
+        super.update(deltaTime)
     }
 
     override fun updateInterval() {

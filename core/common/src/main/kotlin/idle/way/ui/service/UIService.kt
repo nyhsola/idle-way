@@ -4,14 +4,10 @@ import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.ashley.signals.Signal
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.Disposable
-import com.badlogic.gdx.utils.viewport.ScalingViewport
-import com.badlogic.gdx.utils.viewport.Viewport
 import idle.way.event.EventContext
 import idle.way.event.EventQueue
-import idle.way.service.CommonResources
+import idle.way.ui.game.GameUI
 import idle.way.ui.menu.MenuUI
 import ktx.app.KtxInputAdapter
 import org.koin.core.annotation.Single
@@ -25,17 +21,13 @@ class UIService : KtxInputAdapter, Disposable {
 
     private val engine: Engine by inject(PooledEngine::class.java)
     private val eventQueue: EventQueue by inject(EventQueue::class.java)
-    private val commonResources: CommonResources by inject(CommonResources::class.java)
-    private val spriteBatch: SpriteBatch by inject(SpriteBatch::class.java)
-    private val viewport: Viewport by inject(ScalingViewport::class.java)
-    private val menuUI = MenuUI(createStage(), commonResources, eventQueue)
-
+    private val menuUI: MenuUI by inject(MenuUI::class.java)
+    private val gameUI: GameUI by inject(GameUI::class.java)
     private val signal = Signal<EventContext>()
-
-    private fun createStage() = Stage(viewport, spriteBatch)
 
     fun init() {
         signal.add(eventQueue)
+        engine.addEntity(gameUI)
         engine.addEntity(menuUI)
     }
 
@@ -63,6 +55,7 @@ class UIService : KtxInputAdapter, Disposable {
     }
 
     override fun dispose() {
+        engine.removeEntity(gameUI)
         engine.removeEntity(menuUI)
     }
 }

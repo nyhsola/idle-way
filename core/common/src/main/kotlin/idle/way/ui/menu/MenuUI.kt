@@ -2,25 +2,32 @@ package idle.way.ui.menu
 
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.signals.Signal
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.utils.viewport.ScalingViewport
+import com.badlogic.gdx.utils.viewport.Viewport
 import idle.way.component.render.StageRenderComponent
 import idle.way.event.EventContext
 import idle.way.event.EventQueue
 import idle.way.service.CommonResources
 import idle.way.system.GameManagerSystem
+import idle.way.util.UIUtil
+import org.koin.core.annotation.Single
+import org.koin.java.KoinJavaComponent
 
-class MenuUI(
-    stage: Stage,
-    private val commonResources: CommonResources,
-    eventQueue: EventQueue
-) : Entity() {
+@Single
+class MenuUI : Entity() {
+    private val eventQueue: EventQueue by KoinJavaComponent.inject(EventQueue::class.java)
+    private val commonResources: CommonResources by KoinJavaComponent.inject(CommonResources::class.java)
+    private val spriteBatch: SpriteBatch by KoinJavaComponent.inject(SpriteBatch::class.java)
+    private val viewport: Viewport by KoinJavaComponent.inject(ScalingViewport::class.java)
+    private val stage = UIUtil.createStage(viewport, spriteBatch)
     private val stageRenderComponent: StageRenderComponent = StageRenderComponent(stage).also { this.add(it) }
     private val rootContainer = Container<Table>()
     private val rootTable = Table()

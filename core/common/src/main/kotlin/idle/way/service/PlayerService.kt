@@ -1,10 +1,11 @@
 package idle.way.service
 
 import idle.way.event.EventQueue
+import org.koin.core.annotation.Single
 import org.koin.java.KoinJavaComponent
 
+@Single
 class PlayerService {
-
     companion object {
         const val UPGRADE_CASTLE = "UPGRADE_CASTLE"
         const val ASSIGN_WORKER = "ASSIGN_WORKER"
@@ -41,21 +42,21 @@ class PlayerService {
         }
     }
 
-    fun updatePerSec() {
+    private fun updatePerSec() {
         changeWorkers(incomeWorkers)
     }
 
-    fun upgradeCastle() {
+    private fun upgradeCastle() {
         castleLevel++
         incomeWorkers = 1 + castleLevel
         //timeSpawn = (180/(castleLevel + 5) + 30).toFloat()
     }
 
-
     private fun changeWorkers(numberOfWorkers: Int) {
         workersCount += numberOfWorkers
     }
 
+    fun getTimeSpawn() = timeSpawn
     fun getIncomeWorkers() = incomeWorkers
     fun getCastleLevel() = castleLevel
     fun getWorkers() = workersCount
