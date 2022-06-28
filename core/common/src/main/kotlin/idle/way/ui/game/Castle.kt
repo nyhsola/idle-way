@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
 import idle.way.event.EventContext
 import idle.way.event.EventQueue
+import idle.way.service.CastleService
 import idle.way.service.CommonResources
 import idle.way.service.PlayerService
 import org.koin.core.annotation.Single
@@ -18,16 +19,16 @@ import org.koin.java.KoinJavaComponent
 class Castle : Table() {
     private val eventQueue: EventQueue by KoinJavaComponent.inject(EventQueue::class.java)
     private val commonResources: CommonResources by KoinJavaComponent.inject(CommonResources::class.java)
-    private val playerService: PlayerService by KoinJavaComponent.inject(PlayerService::class.java)
+    private val castleService: CastleService by KoinJavaComponent.inject(CastleService::class.java)
 
     private val headerTemplate
-        get() = "Castle Level ${playerService.getLevel()}"
+        get() = "Castle Level ${castleService.getLevel()}"
     private val workersCountLabelTemplate
-        get() = "Workers (Free): ${playerService.getWorkersCount()}"
+        get() = "Workers (Free): ${castleService.getWorkersCount()}"
     private val workersIncomeLabelTemplate
-        get() = "${playerService.getIncomeWorkers()} Worker(s) per ${String.format("%.2f", playerService.getTimeSpawn())} sec"
+        get() = "${castleService.getIncomeWorkers()} Worker(s) per ${String.format("%.2f", castleService.getTimeSpawn())} sec"
     private val castleLevelButtonTemplate
-        get() = "Upgrade: (${playerService.getLevel() + 1} lvl)"
+        get() = "Upgrade: (${castleService.getLevel() + 1} lvl)"
 
     private val headerLabel = Label("Castle", commonResources.skin)
     private val workersCountLabel = Label(workersCountLabelTemplate, commonResources.skin)

@@ -4,11 +4,10 @@ import idle.way.util.Task
 import org.koin.core.annotation.Single
 
 @Single
-class MineService {
-    private var stoneIncome = 1f
-    private var level = 1
+class CastleService {
     private var workersCount = 1
-    private var stoneCount = 0f
+    private var incomeWorkers = 1
+    private var level = 1
 
     private val task: Task = object : Task(1f) {
         override fun action() {
@@ -20,21 +19,21 @@ class MineService {
         task.update(deltaTime)
     }
 
-    private fun incomePerTimeSpawn() {
-        stoneCount += workersCount * level * 0.1f
+    fun assignWorker() {
+        workersCount -= 1
     }
 
-    fun upgradeMine() {
+    fun upgradeCastle() {
         level++
+        incomeWorkers = 1 + level
     }
 
-    fun addWorker() {
-        workersCount++
+    private fun incomePerTimeSpawn() {
+        workersCount += incomeWorkers
     }
 
     fun getTimeSpawn() = task.interval
-    fun getIncomeStone() = stoneIncome
+    fun getIncomeWorkers() = incomeWorkers
     fun getLevel() = level
     fun getWorkersCount() = workersCount
-    fun getStoneCount() = stoneCount
 }

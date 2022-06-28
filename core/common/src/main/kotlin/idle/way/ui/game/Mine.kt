@@ -58,7 +58,7 @@ class Mine : Table() {
 
         stoneLevelButton.addCaptureListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
-                signal.dispatch(EventContext(MineService.UPGRADE_MINE))
+                signal.dispatch(EventContext(PlayerService.UPGRADE_MINE))
             }
         })
 

@@ -2,9 +2,9 @@ package idle.way.ui.game
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import idle.way.service.CastleService
 import idle.way.service.CommonResources
 import idle.way.service.MineService
-import idle.way.service.PlayerService
 import org.koin.core.annotation.Single
 import org.koin.java.KoinJavaComponent
 
@@ -12,11 +12,11 @@ import org.koin.java.KoinJavaComponent
 class PanelResources : Table() {
     private val commonResources: CommonResources by KoinJavaComponent.inject(CommonResources::class.java)
 
-    private val playerService: PlayerService by KoinJavaComponent.inject(PlayerService::class.java)
+    private val castleService: CastleService by KoinJavaComponent.inject(CastleService::class.java)
     private val mineService: MineService by KoinJavaComponent.inject(MineService::class.java)
 
     private val workersCountTemplate
-        get() = "Workers (Free): ${playerService.getWorkersCount()}"
+        get() = "Workers (Free): ${castleService.getWorkersCount()}"
     private val stoneCountTemplate
         get() = "Stone: ${String.format("%.2f", mineService.getStoneCount())}"
 
