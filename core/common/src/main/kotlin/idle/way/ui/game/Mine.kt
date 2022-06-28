@@ -27,7 +27,7 @@ class Mine : Table() {
     private val workersCountLabelTemplate
         get() = "Workers (Assigned): ${mineService.getWorkersCount()}"
     private val stoneIncomeLabelTemplate
-        get() = "${String.format("%.2f", mineService.getIncomeStone())} Stone per ${String.format("%.2f", mineService.getTimeSpawn())} sec"
+        get() = "${String.format("%.2f", mineService.getIncome())} Stone per ${String.format("%.2f", mineService.getTimeSpawn())} sec"
     private val stoneLevelButtonTemplate
         get() = "Upgrade: (${mineService.getLevel() + 1} lvl)"
     private val assignWorkerButtonTemplate

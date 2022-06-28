@@ -27,7 +27,7 @@ class Farm : Table() {
     private val workersCountLabelTemplate
         get() = "Workers (Assigned): ${farmService.getWorkersCount()}"
     private val wheatIncomeLabelTemplate
-        get() = "${String.format("%.2f", farmService.getIncomeWheat())} Stone per ${String.format("%.2f", farmService.getTimeSpawn())} sec"
+        get() = "${String.format("%.2f", farmService.getIncome())} Stone per ${String.format("%.2f", farmService.getTimeSpawn())} sec"
     private val farmLevelButtonTemplate
         get() = "Upgrade: (${farmService.getLevel() + 1} lvl)"
     private val assignWorkerButtonTemplate

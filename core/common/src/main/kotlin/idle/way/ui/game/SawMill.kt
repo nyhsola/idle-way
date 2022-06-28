@@ -27,7 +27,7 @@ class SawMill : Table() {
     private val workersCountLabelTemplate
         get() = "Workers (Assigned): ${sawMillService.getWorkersCount()}"
     private val woodIncomeLabelTemplate
-        get() = "${String.format("%.2f", sawMillService.getIncomeWood())} Wood per ${String.format("%.2f", sawMillService.getTimeSpawn())} sec"
+        get() = "${String.format("%.2f", sawMillService.getIncome())} Wood per ${String.format("%.2f", sawMillService.getTimeSpawn())} sec"
     private val woodLevelButtonTemplate
         get() = "Upgrade: (${sawMillService.getLevel() + 1} lvl)"
     private val assignWorkerButtonTemplate

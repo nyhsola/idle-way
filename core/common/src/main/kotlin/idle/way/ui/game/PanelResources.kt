@@ -18,11 +18,11 @@ class PanelResources : Table() {
     private val workersCountTemplate
         get() = "Workers (Free): ${castleService.getWorkersCount()}"
     private val stoneCountTemplate
-        get() = "Stone: ${String.format("%.2f", mineService.getStoneCount())}"
+        get() = "Stone: ${String.format("%.2f", mineService.getResourcesCount())}"
     private val woodCountTemplate
-        get() = "Wood: ${String.format("%.2f", sawMillService.getWoodCount())}"
+        get() = "Wood: ${String.format("%.2f", sawMillService.getResourcesCount())}"
     private val wheatCountTemplate
-        get() = "Wheat: ${String.format("%.2f", farmService.getWheatCount())}"
+        get() = "Wheat: ${String.format("%.2f", farmService.getResourcesCount())}"
 
     private val workersCountLabel = TextButton(workersCountTemplate, commonResources.skin)
     private val stoneCountLabel = TextButton(stoneCountTemplate, commonResources.skin)

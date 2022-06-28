@@ -23,42 +23,37 @@ class PlayerService {
     private val sawMillService: SawMillService by KoinJavaComponent.inject(SawMillService::class.java)
     private val farmService: FarmService by KoinJavaComponent.inject(FarmService::class.java)
 
+    private val map: Map<String, () -> Unit> = hashMapOf(
+        Pair(UPGRADE_CASTLE) {
+            castleService.upgradeCastle()
+        },
+        Pair(ASSIGN_WORKER_MINE) {
+            castleService.assignWorker()
+            mineService.addWorker()
+        },
+        Pair(UPGRADE_MINE) {
+            mineService.upgradeBuilding()
+        },
+        Pair(ASSIGN_WORKER_SAWMILL) {
+            castleService.assignWorker()
+            sawMillService.addWorker()
+        },
+        Pair(UPGRADE_SAWMILL) {
+            sawMillService.upgradeBuilding()
+        },
+        Pair(ASSIGN_WORKER_FARM) {
+            castleService.assignWorker()
+            farmService.addWorker()
+        },
+        Pair(UPGRADE_FARM) {
+            farmService.upgradeBuilding()
+        }
+    )
 
     private val operation: (EventContext) -> Boolean = {
-        when (it.eventType) {
-            UPGRADE_CASTLE -> {
-                castleService.upgradeCastle()
-                true
-            }
-            ASSIGN_WORKER_MINE -> {
-                castleService.assignWorker()
-                mineService.addWorker()
-                true
-            }
-            UPGRADE_MINE -> {
-                mineService.upgradeMine()
-                true
-            }
-            ASSIGN_WORKER_SAWMILL -> {
-                castleService.assignWorker()
-                sawMillService.addWorker()
-                true
-            }
-            UPGRADE_SAWMILL -> {
-                sawMillService.upgradeSawMill()
-                true
-            }
-            ASSIGN_WORKER_FARM -> {
-                castleService.assignWorker()
-                farmService.addWorker()
-                true
-            }
-            UPGRADE_FARM -> {
-                farmService.upgradeFarm()
-                true
-            }
-            else -> false
-        }
+        val function = map[it.eventType]
+        function?.invoke()
+        function != null
     }
 
     fun update(deltaTime: Float) {
