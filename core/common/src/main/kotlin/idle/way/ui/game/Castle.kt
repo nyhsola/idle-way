@@ -3,6 +3,7 @@ package idle.way.ui.game
 import com.badlogic.ashley.signals.Signal
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
@@ -34,6 +35,8 @@ class Castle : Table() {
     private val workersCountLabel = Label(workersCountLabelTemplate, commonResources.skin)
     private val workersIncomeLabel = Label(workersIncomeLabelTemplate, commonResources.skin)
     private val castleLevelButton = TextButton(castleLevelButtonTemplate, commonResources.skin)
+    private val incomeBar = ProgressBar(0f, 100f, 1f, false, commonResources.skin)
+
     private val signal = Signal<EventContext>()
 
     init {
@@ -50,6 +53,8 @@ class Castle : Table() {
         add(workersIncomeLabel).grow()
         row()
         add(castleLevelButton).grow()
+        row()
+        add(incomeBar).grow()
 
         castleLevelButton.addCaptureListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
@@ -68,6 +73,7 @@ class Castle : Table() {
         workersCountLabel.setText(workersCountLabelTemplate)
         castleLevelButton.setText(castleLevelButtonTemplate)
         workersIncomeLabel.setText(workersIncomeLabelTemplate)
+        incomeBar.value = 100 - 100 * (castleService.getTimeLeft() / castleService.getTimeSpawn())
         super.act(delta)
     }
 }

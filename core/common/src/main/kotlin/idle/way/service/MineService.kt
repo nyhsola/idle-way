@@ -32,6 +32,7 @@ class MineService {
         workersCount++
     }
 
+    fun getTimeLeft() = task.timeLeft
     fun getTimeSpawn() = task.interval
     fun getIncomeStone() = stoneIncome
     fun getLevel() = level

@@ -32,6 +32,7 @@ class CastleService {
         workersCount += incomeWorkers
     }
 
+    fun getTimeLeft() = task.timeLeft
     fun getTimeSpawn() = task.interval
     fun getIncomeWorkers() = incomeWorkers
     fun getLevel() = level

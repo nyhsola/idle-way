@@ -3,6 +3,7 @@ package idle.way.ui.game
 import com.badlogic.ashley.signals.Signal
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
@@ -37,6 +38,7 @@ class Mine : Table() {
     private val stoneIncomeLabel = Label(stoneIncomeLabelTemplate, commonResources.skin)
     private val stoneLevelButton = TextButton(stoneLevelButtonTemplate, commonResources.skin)
     private val assignWorkerButton = TextButton(assignWorkerButtonTemplate, commonResources.skin)
+    private val incomeBar = ProgressBar(0f, 100f, 1f, false, commonResources.skin)
     private val signal = Signal<EventContext>()
 
     init {
@@ -55,6 +57,8 @@ class Mine : Table() {
         add(assignWorkerButton).grow()
         row()
         add(stoneLevelButton).grow()
+        row()
+        add(incomeBar).grow()
 
         stoneLevelButton.addCaptureListener(object : ClickListener() {
             override fun clicked(event: InputEvent, x: Float, y: Float) {
@@ -80,6 +84,7 @@ class Mine : Table() {
         workersCountLabel.setText(workersCountLabelTemplate)
         stoneIncomeLabel.setText(stoneIncomeLabelTemplate)
         stoneLevelButton.setText(stoneLevelButtonTemplate)
+        incomeBar.value = 100 - 100 * (mineService.getTimeLeft() / mineService.getTimeSpawn())
         super.act(delta)
     }
 }

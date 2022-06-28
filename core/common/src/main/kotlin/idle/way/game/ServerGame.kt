@@ -1,20 +1,12 @@
 package idle.way.game
 
-import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
-import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.utils.Scaling
-import com.badlogic.gdx.utils.viewport.ScalingViewport
 import idle.way.config.GameModule
 import idle.way.event.EventContext
 import idle.way.event.EventQueue
 import ktx.app.KtxGame
-import org.koin.core.context.startKoin
-import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent
-import org.koin.ksp.generated.module
 import kotlin.math.min
 
 class ServerGame : KtxGame<Screen>() {
@@ -33,24 +25,7 @@ class ServerGame : KtxGame<Screen>() {
     }
 
     override fun create() {
-        val defaultModule = module {
-            single { PooledEngine() }
-            single { SpriteBatch() }
-            single {
-                ScalingViewport(
-                    Scaling.stretch,
-                    Gdx.graphics.width.toFloat(),
-                    Gdx.graphics.height.toFloat(),
-                    OrthographicCamera()
-                )
-            }
-        }
-
-        startKoin {
-            modules(defaultModule)
-            modules(gameModule.module)
-        }
-
+        gameModule.start()
         addScreen(startScreen)
         addScreen(gameScreen)
         setScreen<StartScreen>()
