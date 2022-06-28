@@ -3,6 +3,7 @@ package idle.way.system
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.systems.IntervalSystem
 import com.badlogic.gdx.Gdx
+import idle.way.event.EventContext
 import idle.way.event.EventQueue
 import idle.way.service.PlayerService
 import idle.way.ui.service.UIService
@@ -22,6 +23,16 @@ class GameManagerSystem : IntervalSystem(GAME_TICK), KtxInputAdapter, KtxScreen 
     private val playerService: PlayerService by inject(PlayerService::class.java)
     private val eventQueue: EventQueue by inject(EventQueue::class.java)
 
+    private val operation: (EventContext) -> Boolean = {
+        when (it.eventType) {
+            EXIT_GAME -> {
+                Gdx.app.postRunnable(Gdx.app::exit)
+                true
+            }
+            else -> false
+        }
+    }
+
     override fun addedToEngine(engine: Engine) {
         uiService.init()
     }
@@ -33,19 +44,7 @@ class GameManagerSystem : IntervalSystem(GAME_TICK), KtxInputAdapter, KtxScreen 
 
     override fun updateInterval() {
         uiService.update()
-        proceedEvents()
-    }
-
-    private fun proceedEvents() {
-        eventQueue.proceed {
-            when (it.eventType) {
-                EXIT_GAME -> {
-                    Gdx.app.postRunnable(Gdx.app::exit)
-                    true
-                }
-                else -> false
-            }
-        }
+        eventQueue.proceed(operation)
     }
 
     override fun keyDown(keycode: Int): Boolean {

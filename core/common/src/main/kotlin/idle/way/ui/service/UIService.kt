@@ -24,6 +24,15 @@ class UIService : KtxInputAdapter, Disposable {
     private val menuUI: MenuUI by inject(MenuUI::class.java)
     private val gameUI: GameUI by inject(GameUI::class.java)
     private val signal = Signal<EventContext>()
+    private val operation: (EventContext) -> Boolean = {
+        when (it.eventType) {
+            MENU_ENABLE -> {
+                menuUI.isVisible = !menuUI.isVisible
+                true
+            }
+            else -> false
+        }
+    }
 
     fun init() {
         signal.add(eventQueue)
@@ -32,7 +41,7 @@ class UIService : KtxInputAdapter, Disposable {
     }
 
     fun update() {
-        proceedEvents()
+        eventQueue.proceed(operation)
     }
 
     override fun keyDown(keycode: Int): Boolean {
@@ -40,18 +49,6 @@ class UIService : KtxInputAdapter, Disposable {
             signal.dispatch(EventContext(MENU_ENABLE))
         }
         return super.keyDown(keycode)
-    }
-
-    private fun proceedEvents() {
-        eventQueue.proceed {
-            when (it.eventType) {
-                MENU_ENABLE -> {
-                    menuUI.isVisible = !menuUI.isVisible
-                    true
-                }
-                else -> false
-            }
-        }
     }
 
     override fun dispose() {

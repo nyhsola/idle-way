@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScalingViewport
 import idle.way.config.GameModule
+import idle.way.event.EventContext
 import idle.way.event.EventQueue
 import ktx.app.KtxGame
 import org.koin.core.context.startKoin
@@ -21,6 +22,15 @@ class ServerGame : KtxGame<Screen>() {
     private val startScreen: StartScreen by KoinJavaComponent.inject(StartScreen::class.java)
     private val gameScreen: GameScreen by KoinJavaComponent.inject(GameScreen::class.java)
     private val eventQueue: EventQueue by KoinJavaComponent.inject(EventQueue::class.java)
+
+    private val operation: (EventContext) -> Boolean = {
+        when (it.eventType) {
+            StartScreen.GAME_EVENT -> {
+                setScreen<GameScreen>()
+            }
+        }
+        false
+    }
 
     override fun create() {
         val defaultModule = module {
@@ -47,23 +57,12 @@ class ServerGame : KtxGame<Screen>() {
     }
 
     override fun render() {
-        proceedEvent()
+        eventQueue.proceed(operation)
         currentScreen.render(min(1f / 30f, Gdx.graphics.deltaTime))
     }
 
     override fun dispose() {
         gameModule.dispose()
         super.dispose()
-    }
-
-    private fun proceedEvent() {
-        eventQueue.proceed {
-            when (it.eventType) {
-                StartScreen.GAME_EVENT -> {
-                    setScreen<GameScreen>()
-                }
-            }
-            false
-        }
     }
 }

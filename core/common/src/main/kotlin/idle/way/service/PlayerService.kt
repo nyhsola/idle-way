@@ -1,6 +1,8 @@
 package idle.way.service
 
+import idle.way.event.EventContext
 import idle.way.event.EventQueue
+import idle.way.util.Task
 import org.koin.core.annotation.Single
 import org.koin.java.KoinJavaComponent
 
@@ -12,52 +14,54 @@ class PlayerService {
     }
 
     private val eventQueue: EventQueue by KoinJavaComponent.inject(EventQueue::class.java)
-    var accumulate: Float = 0f
+    private val mineService: MineService by KoinJavaComponent.inject(MineService::class.java)
 
-    private var timeSpawn = 1f
     private var workersCount = 1
     private var incomeWorkers = 1
-    private var castleLevel = 1
+    private var level = 1
+
+    private val task: Task = object : Task(1f) {
+        override fun action() {
+            incomePerTimeSpawn()
+        }
+    }
+
+    private val operation: (EventContext) -> Boolean = {
+        when (it.eventType) {
+            UPGRADE_CASTLE -> {
+                upgradeCastle()
+                true
+            }
+            ASSIGN_WORKER -> {
+                assignWorker()
+                true
+            }
+            else -> false
+        }
+    }
+
+    private fun assignWorker() {
+        mineService.addWorker()
+        workersCount -= 1
+    }
 
     fun update(deltaTime: Float) {
-        proceedEvents()
-
-        accumulate += deltaTime
-
-        while (accumulate > 0) {
-            accumulate -= timeSpawn
-            updatePerSec()
-        }
+        mineService.update(deltaTime)
+        eventQueue.proceed(operation)
+        task.update(deltaTime)
     }
 
-    private fun proceedEvents() {
-        eventQueue.proceed {
-            when (it.eventType) {
-                UPGRADE_CASTLE -> {
-                    upgradeCastle()
-                    true
-                }
-                else -> false
-            }
-        }
-    }
-
-    private fun updatePerSec() {
-        changeWorkers(incomeWorkers)
+    private fun incomePerTimeSpawn() {
+        workersCount += incomeWorkers
     }
 
     private fun upgradeCastle() {
-        castleLevel++
-        incomeWorkers = 1 + castleLevel
-        //timeSpawn = (180/(castleLevel + 5) + 30).toFloat()
+        level++
+        incomeWorkers = 1 + level
     }
 
-    private fun changeWorkers(numberOfWorkers: Int) {
-        workersCount += numberOfWorkers
-    }
-
-    fun getTimeSpawn() = timeSpawn
+    fun getTimeSpawn() = task.interval
     fun getIncomeWorkers() = incomeWorkers
-    fun getCastleLevel() = castleLevel
-    fun getWorkers() = workersCount
+    fun getLevel() = level
+    fun getWorkersCount() = workersCount
 }
